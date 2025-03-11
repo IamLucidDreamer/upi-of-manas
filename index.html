@@ -111,7 +111,7 @@
       window.onload = function () {
         const params = getQueryParams();
         document.getElementById("paymentAmount").innerText = params.amount;
-        document.getElementById("upiLink").href = `href="upi://pay?pa=shuklamanasofficial@okaxis&pn=MANAS SHUKLA&cu=INR"&am=${params.amount}`;
+        document.getElementById("upiLink").href = `upi://pay?pa=shuklamanasofficial@okaxis&pn=MANAS SHUKLA&cu=INR&am=${params.amount}`;
       };
     </script>
   </body>
