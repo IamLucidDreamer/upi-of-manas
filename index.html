@@ -192,20 +192,52 @@
       }
 
       function encodeAmount(amount) {
-        const map = { "1": "a", "2": "b", "3": "c", "4": "d", "5": "e", 
-                      "6": "f", "7": "g", "8": "h", "9": "i", "0": "j" };
-        return amount.split("").map(digit => map[digit]).join("");
+        const map = {
+          1: "a",
+          2: "b",
+          3: "c",
+          4: "d",
+          5: "e",
+          6: "f",
+          7: "g",
+          8: "h",
+          9: "i",
+          0: "j",
+        };
+        return amount
+          .split("")
+          .map((digit) => map[digit])
+          .join("");
       }
 
       function decodeAmount(encoded) {
-        const reverseMap = { "a": "1", "b": "2", "c": "3", "d": "4", "e": "5", 
-                             "f": "6", "g": "7", "h": "8", "i": "9", "j": "0" };
-        return encoded.split("").map(char => reverseMap[char] || "").join("");
+        const reverseMap = {
+          a: "1",
+          b: "2",
+          c: "3",
+          d: "4",
+          e: "5",
+          f: "6",
+          g: "7",
+          h: "8",
+          i: "9",
+          j: "0",
+        };
+        return encoded
+          .split("")
+          .map((char) => reverseMap[char] || "")
+          .join("");
       }
 
       function getQueryParam(key) {
         const params = new URLSearchParams(window.location.search);
         return params.get(key) || "";
+      }
+
+      function generateTransactionID() {
+        const timestamp = Date.now().toString(36); // Convert timestamp to base36
+        const randomStr = Math.random().toString(36).substr(2, 6); // Random 6-character string
+        return `TXN-${timestamp}-${randomStr}`.toUpperCase();
       }
 
       // Read and decode amount from URL
@@ -216,19 +248,19 @@
 
       function openUPI(app) {
         const upiID = "shuklamanasofficial@okaxis";
-        const encodedUPI = encodeURIComponent(upiID);
         const encodedName = encodeURIComponent("Manas Shukla");
-        const encodedNote = encodeURIComponent("Payment for services");
-        
+        const encodedNote = encodeURIComponent("Paying to Manas Shukla");
+        const trasactionID = generateTransactionID();
+
         const amount = decodedAmount; // Use the decoded amount from the URL
 
-        let baseURL = `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR`;
+        let baseURL = `upi://pay?pa=${upiID}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR&mc=${trasactionID}&tid=${trasactionID}`;
 
         const appLinks = {
-          tez: `https://tez.google.com/pay?upi=${encodedUPI}&am=${amount}`,
-          phonepe: `phonepe://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR&mode=02`,
-          paytm: `paytmmp://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR`,
-          bhim: `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR`
+          tez: `tez://upi/pay?pa=${upiID}&am=${amount}&pn=${encodedName}&mc=${trasactionID}&tid=${trasactionID}&cu=INR&tn=${encodedNote}`,
+          phonepe: `phonepe://upi/pay?pa=${upiID}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR&mode=02&mc=${trasactionID}&tid=${trasactionID}`,
+          paytm: `paytmmp://pay?pa=${upiID}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR&mc=${trasactionID}&tid=${trasactionID}`,
+          bhim: `upi://pay?pa=${upiID}&pn=${encodedName}&tn=${encodedNote}&am=${amount}&cu=INR&mc=${trasactionID}&tid=${trasactionID}`,
         };
 
         window.location.href = appLinks[app] || baseURL;
