@@ -73,7 +73,7 @@
         color: #007bff;
       }
       .upi-payment {
-        margin-top: 20px;
+        margin-top: 0px;
         display: flex;
         justify-content: space-between;
       }
@@ -140,29 +140,33 @@
         </div>
       </div>
 
+      <h1 style="text-align: left; font-size: 14px; margin-top: 30px; color: rgb(208, 0, 0);">
+        Payment Methods not available currently. Due to Server Restrictions.<br />
+      </h1>
+
       <div class="upi-payment">
-        <button onclick="openUPI('tez')">
+        <button onclick="openUPI('tez')" disabled>
           <img
             src="./images/icons8-google-pay-50.png"
             alt="Google Pay"
             class="payment-provider-img"
           />
         </button>
-        <button onclick="openUPI('phonepe')">
+        <button onclick="openUPI('phonepe')" disabled>
           <img
             src="./images/icons8-phone-pe-48.png"
             alt="Phone Pe"
             class="payment-provider-img"
           />
         </button>
-        <button onclick="openUPI('paytm')">
+        <button onclick="openUPI('paytm')" disabled>
           <img
             src="./images/icons8-paytm-48.png"
             alt="Paytm"
             class="payment-provider-img"
           />
         </button>
-        <button onclick="openUPI('bhim')">
+        <button onclick="openUPI('bhim')" disabled>
           <img
             src="./images/icons8-bhim-50.png"
             alt="BHIM"
@@ -179,10 +183,15 @@
     <script>
       function toggleQRCode() {
         const qrImage = document.getElementById("upiQR");
+        const bankDetails = document.getElementsByClassName("bank-details")[0];
         qrImage.style.display =
           qrImage.style.display === "none" || qrImage.style.display === ""
             ? "block"
             : "none";
+        bankDetails.style.display =
+          bankDetails.style.display === "block" || bankDetails.style.display === ""
+            ? "none"
+            : "block";
       }
 
       function copyToClipboard(text) {
