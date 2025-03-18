@@ -192,23 +192,23 @@
       }
 
       function openUPI(app) {
-        const upiID = "shuklamanasofficial@okaxis"; // Replace with actual UPI ID
+        const upiID = "shuklamanasofficial@okaxis"; // Updated UPI ID
         const encodedUPI = encodeURIComponent(upiID);
         const encodedName = encodeURIComponent("Manas Shukla");
-        const encodedNote = encodeURIComponent("Payment");
+        const encodedNote = encodeURIComponent("Payment for services");
 
-        // Construct base UPI link without amount
+        // Base UPI link (no mandatory amount)
         let baseURL = `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`;
 
         // Define app-specific UPI links
         const appLinks = {
-          tez: `tez://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
+          tez: `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
           phonepe: `phonepe://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
-          paytm: `paytmmp://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
+          paytm: `paytm://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
           bhim: `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
         };
 
-        // Attempt to open the specific app, fallback to default UPI link
+        // Open the app-specific link or fallback to base UPI URL
         window.location.href = appLinks[app] || baseURL;
       }
     </script>
