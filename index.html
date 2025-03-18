@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UPI Payment - Manas</title>
-    <link rel="stylesheet" href="styles.css" />
     <style>
       body {
         display: flex;
@@ -13,18 +12,18 @@
         justify-content: center;
         height: 100vh;
         margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        font-family: "IBM Plex Mono", monospace;
+        background-color: var(--backgroundColor, #c3a4ff);
+        line-height: 1.6;
         padding: 20px;
       }
       main {
         text-align: center;
-        width: 100%;
+        width: 90%;
         max-width: 400px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 15px 20px;
+        border: 5px solid #000000;
+        background-color: #ffffff;
       }
       img {
         max-width: 100%;
@@ -35,8 +34,8 @@
       }
       button {
         width: 100%;
-        background-color: #007bff;
-        color: white;
+        background-color: #fefc00;
+        color: black;
         border: none;
         padding: 10px;
         font-size: 16px;
@@ -44,75 +43,168 @@
         border-radius: 5px;
         margin: 10px 0;
         transition: 0.3s;
-      }
-      button:hover {
-        background-color: #0056b3;
+        border: #000000 2px solid;
       }
       a {
-        color: white;
+        color: black;
         text-decoration: none;
         display: block;
         width: 100%;
         padding: 10px;
       }
-      #amount {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
+      .bank-details {
+        text-align: left;
       }
-      @media (max-width: 768px) {
-        body {
-          justify-content: flex-start;
-          height: auto;
-          padding-bottom: 70px;
-        }
-        .bottom-nav {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          background: white;
-          display: flex;
-          justify-content: space-around;
-          padding: 10px 0;
-          box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
-        }
-        .bottom-nav button {
-          margin: 0;
-          width: 45%;
-        }
+      .bank-details div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f3f3f3;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      .copy-icon {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+        color: #007bff;
+      }
+      .upi-payment {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .upi-payment button {
+        flex: 1;
+        margin: 5px;
+        background-color: #ffffff;
+        border: 2px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .payment-provider-img {
+        width: 40px;
+        height: 42px;
+        padding: 0px;
+        margin: 0px;
+        display: block;
       }
     </style>
   </head>
   <body>
     <main>
-      <div id="amount">Amount: ₹<span id="paymentAmount">0</span></div>
-      <img id="upiQR" src="upi-of-manas.jpeg" alt="UPI QR Code" />
+      <img id="upiQR" src="./images/upi-of-manas.jpeg" alt="UPI QR Code" />
+      <div class="bank-details">
+        <strong>Bank Details:</strong>
+        <div>
+          <span>Account Name: Manas Shukla</span>
+          <i
+            class="fas fa-copy copy-icon"
+            onclick="copyToClipboard('Manas Shukla')"
+          ></i>
+        </div>
+        <div>
+          <span>Bank Name: Punjab National Bank</span>
+          <i
+            class="fas fa-copy copy-icon"
+            onclick="copyToClipboard('Punjab National Bank')"
+          ></i>
+        </div>
+        <div>
+          <span>Account No: 123456789012</span>
+          <i
+            class="fas fa-copy copy-icon"
+            onclick="copyToClipboard('123456789012')"
+          ></i>
+        </div>
+        <div>
+          <span>IFSC Code: ABCD0123456</span>
+          <i
+            class="fas fa-copy copy-icon"
+            onclick="copyToClipboard('ABCD0123456')"
+          ></i>
+        </div>
+      </div>
+
+      <div class="upi-payment">
+        <button onclick="openUPI('tez')">
+          <img
+            src="./images/icons8-google-pay-50.png"
+            alt="Google Pay"
+            class="payment-provider-img"
+          />
+        </button>
+        <button onclick="openUPI('phonepe')">
+          <img
+            src="./images/icons8-phone-pe-48.png"
+            alt="Phone Pe"
+            class="payment-provider-img"
+          />
+        </button>
+        <button onclick="openUPI('paytm')">
+          <img
+            src="./images/icons8-paytm-48.png"
+            alt="Paytm"
+            class="payment-provider-img"
+          />
+        </button>
+        <button onclick="openUPI('bhim')">
+          <img
+            src="./images/icons8-bhim-50.png"
+            alt="BHIM"
+            class="payment-provider-img"
+          />
+        </button>
+      </div>
     </main>
     <div class="bottom-nav">
-      <button onclick="toggleQRCode()">Toggle QR Code</button>
-      <button id="payButton">
-        <a id="upiLink" href="#">Pay Using Link</a>
+      <button onclick="toggleQRCode()">
+        <a>Toggle QR Code</a>
       </button>
     </div>
     <script>
       function toggleQRCode() {
         const qrImage = document.getElementById("upiQR");
-        qrImage.style.display = qrImage.style.display === "none" || qrImage.style.display === "" ? "block" : "none";
+        qrImage.style.display =
+          qrImage.style.display === "none" || qrImage.style.display === ""
+            ? "block"
+            : "none";
       }
-      
-      function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-          amount: params.get("amount") || "0"
+
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Copied: " + text);
+        });
+      }
+
+      function openUPI(app) {
+        const upiID = "manas@upi"; // Replace with actual UPI ID
+        // const amount = "100"; // You can update this or make it dynamic
+        const url = `upi://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&am=${amount}&cu=INR&url=`;
+
+        const appLinks = {
+          tez: `https://tez.google.com/pay?upi=${upiID}${
+            amount ? `&am=${amount}` : ""
+          }&cu=INR&tn=Payment&mc=`,
+          phonepe: `phonepe://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&${upiID}${
+            amount ? `&am=${amount}` : ""
+          }&cu=INR&tn=Payment&mc=`,
+          paytm: `paytmmp://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&${upiID}${
+            amount ? `&am=${amount}` : ""
+          }&cu=INR&tn=Payment&mc=`,
+          bhim: `upi://pay?pa=${upiID}&pn=Manas%20Shukla&am=${upiID}${
+            amount ? `&am=${amount}` : ""
+          }&cu=INR&tn=Payment&mc=`,
         };
+
+        window.location.href = appLinks[app] || url;
       }
-      
-      window.onload = function () {
-        const params = getQueryParams();
-        document.getElementById("paymentAmount").innerText = params.amount;
-        document.getElementById("upiLink").href = `upi://pay?pa=shuklamanasofficial@okaxis&pn=MANAS SHUKLA&cu=INR&am=${params.amount}`;
-      };
     </script>
   </body>
 </html>
