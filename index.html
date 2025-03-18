@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UPI Payment - Manas</title>
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
     <style>
       body {
         display: flex;
@@ -130,6 +131,13 @@
             onclick="copyToClipboard('ABCD0123456')"
           ></i>
         </div>
+        <div>
+          <span>UPI: shuklamanasofficial@okaxis</span>
+          <i
+            class="fas fa-copy copy-icon"
+            onclick="copyToClipboard('ABCD0123456')"
+          ></i>
+        </div>
       </div>
 
       <div class="upi-payment">
@@ -184,27 +192,24 @@
       }
 
       function openUPI(app) {
-        console.log("Jello worl")
-        const upiID = "shuklamanasofficial@okaxis"; // Replace with actual UPI ID
-        const amount = null; // You can update this or make it dynamic
-        const url = `upi://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&am=${amount}&cu=INR&url=`;
+        const upiID = "manas@upi"; // Replace with actual UPI ID
+        const encodedUPI = encodeURIComponent(upiID);
+        const encodedName = encodeURIComponent("Manas Shukla");
+        const encodedNote = encodeURIComponent("Payment");
 
+        // Construct base UPI link without amount
+        let baseURL = `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`;
+
+        // Define app-specific UPI links
         const appLinks = {
-          tez: `https://tez.google.com/pay?upi=${upiID}${
-            amount ? `&am=${amount}` : ""
-          }&cu=INR&tn=Payment&mc=`,
-          phonepe: `phonepe://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&${upiID}${
-            amount ? `&am=${amount}` : ""
-          }&cu=INR&tn=Payment&mc=`,
-          paytm: `paytmmp://pay?pa=${upiID}&pn=Manas%20Shukla&mc=&tid=&tr=&tn=Payment&${upiID}${
-            amount ? `&am=${amount}` : ""
-          }&cu=INR&tn=Payment&mc=`,
-          bhim: `upi://pay?pa=${upiID}&pn=Manas%20Shukla&am=${upiID}${
-            amount ? `&am=${amount}` : ""
-          }&cu=INR&tn=Payment&mc=`,
+          tez: `tez://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
+          phonepe: `phonepe://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
+          paytm: `paytmmp://upi/pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
+          bhim: `upi://pay?pa=${encodedUPI}&pn=${encodedName}&tn=${encodedNote}&cu=INR`,
         };
 
-        window.location.href = appLinks[app] || url;
+        // Attempt to open the specific app, fallback to default UPI link
+        window.location.href = appLinks[app] || baseURL;
       }
     </script>
   </body>
